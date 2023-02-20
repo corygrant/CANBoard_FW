@@ -92,6 +92,11 @@ void Error_Handler(void);
 #define DO3_GPIO_Port GPIOB
 #define DO4_Pin GPIO_PIN_5
 #define DO4_GPIO_Port GPIOB
+#define CAN_ID_2_Pin GPIO_PIN_6
+#define CAN_ID_2_GPIO_Port GPIOB
+#define CAN_ID_1_Pin GPIO_PIN_7
+#define CAN_ID_1_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -101,5 +106,3 @@ void Error_Handler(void);
 #endif
 
 #endif /* __MAIN_H */
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
