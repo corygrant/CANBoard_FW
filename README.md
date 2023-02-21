@@ -31,7 +31,9 @@ This is a personal hobby project. I am not a professional. Use at your own risk.
 # CAN
 Currently configured as 500 Kbps only
 
-# Message Format
+# Message Format - Inputs
+Messages sent from the CANBoard
+
 The BASE_ID is set using the 1 and 2 solder jumpers, see [CANBoard hardware](https://github.com/corygrant/CANBoard_HW) for more info
 
 ![Message Format](/Images/CANBoard_V2_MessageFormat.jpg)
@@ -45,6 +47,13 @@ The BASE_ID is set using the 1 and 2 solder jumpers, see [CANBoard hardware](htt
     * Value over half scale (2.5V) the input is true (1)
 * **Output States** : Bits representing the digital output states
 * **Heartbeat** : Value incremented every transmit (uint8_t)
+
+# Message Format - Outputs
+Messages sent to the CANBoard
+
+![Message Format Outputs](/Images/CANBoard_V2_MessageFormat_Outputs.jpg)
+
+* **Outputs** : must be value 1 or 0
 
 # Hardware
 [CANBoard hardware](https://github.com/corygrant/CANBoard_HW)
