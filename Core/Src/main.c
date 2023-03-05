@@ -98,6 +98,10 @@ static volatile uint8_t nCanRotarySwitch[5];
 static volatile uint8_t nCanAnalogSwitch[5];
 static volatile uint8_t nCanRotaryInvert[5];
 
+static volatile uint8_t nCanBaseIdOffset;
+static volatile uint8_t nCanId1;
+static volatile uint8_t nCanId2;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -461,7 +465,7 @@ static void MX_CAN_Init(void)
     Error_Handler();
   }
 
-  CanTxHeader.StdId = CAN_BASE_ID;
+  CanTxHeader.StdId = CAN_BASE_ID + nCanBaseIdOffset;
   CanTxHeader.ExtId = 0;
   CanTxHeader.RTR = CAN_RTR_DATA;
   CanTxHeader.IDE = CAN_ID_STD;
@@ -601,7 +605,7 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
     Error_Handler();
   }
 
-  if((CanRxHeader.StdId == CAN_BASE_ID + 3) && (CanRxHeader.IDE == CAN_ID_STD) && (CanRxHeader.DLC >= 4))
+  if((CanRxHeader.StdId == CAN_BASE_ID + nCanBaseIdOffset + 3) && (CanRxHeader.IDE == CAN_ID_STD) && (CanRxHeader.DLC >= 4))
   {
     nCanDigOut[0] = CanRxData[0] & 0x01;
     nCanDigOut[1] = CanRxData[1] & 0x01;
@@ -615,7 +619,7 @@ void TxCanMsgs()
   //=======================================================
   //Build Msg 0 (Analog inputs 1-4 millivolts)
   //=======================================================
-  CanTxHeader.StdId = CAN_BASE_ID + 0;
+  CanTxHeader.StdId = CAN_BASE_ID + nCanBaseIdOffset + 0;
   CanTxHeader.DLC = 8; //Bytes to send
   CanTxData[0] = ((float)anIn[0] / 4096) * 4850; //Scaled to 4.85v - voltage divider on input, 3.3V = 4.85V on input
   CanTxData[1] = ((float)(anIn[0] >> 8) / 4096) * 4850;
@@ -638,7 +642,7 @@ void TxCanMsgs()
   //=======================================================
   //Build Msg 1 (Analog input 5 millivolts and temperature)
   //=======================================================
-  CanTxHeader.StdId = CAN_BASE_ID + 1;
+  CanTxHeader.StdId = CAN_BASE_ID + nCanBaseIdOffset + 1;
   CanTxHeader.DLC = 8; //Bytes to send
   CanTxData[0] = ((float)anIn[4] / 4096) * 4850; //Scaled to 4.85v - voltage divider on input, 3.3V = 4.85V on input
   CanTxData[1] = ((float)(anIn[4] >> 8) / 4096) * 4850;
@@ -707,7 +711,7 @@ void TxCanMsgs()
   //=======================================================
   //Build Msg 2 (Rotary switches, dig inputs, analog input switches, low side output status, heartbeat)
   //=======================================================
-  CanTxHeader.StdId = CAN_BASE_ID + 2;
+  CanTxHeader.StdId = CAN_BASE_ID + nCanBaseIdOffset + 2;
   CanTxHeader.DLC = 8; //Bytes to send
   CanTxData[0] = (nCanRotarySwitch[1] << 4) + nCanRotarySwitch[0];
   CanTxData[1] = (nCanRotarySwitch[3] << 4) + nCanRotarySwitch[2];
@@ -749,6 +753,13 @@ void StartDefaultTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+    //=======================================================
+    //Set CAN base ID
+    //=======================================================
+    nCanId1 = HAL_GPIO_ReadPin(CAN_ID_1_GPIO_Port, CAN_ID_1_Pin);
+    nCanId2 = HAL_GPIO_ReadPin(CAN_ID_2_GPIO_Port, CAN_ID_2_Pin);
+    nCanBaseIdOffset = (nCanId1 << 4) + (nCanId2 << 5);
+
     //=======================================================
     //Set digital outputs
     //=======================================================
