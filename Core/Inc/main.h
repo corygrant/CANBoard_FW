@@ -98,8 +98,8 @@ void Error_Handler(void);
 #define CAN_ID_1_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define MAJOR_VERSION 0
-#define MINOR_VERSION 1
+#define MAJOR_VERSION 1
+#define MINOR_VERSION 2
 #define BUILD 0
 /* USER CODE END Private defines */
 
