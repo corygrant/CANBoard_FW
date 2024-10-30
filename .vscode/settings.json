@@ -1,0 +1,17 @@
+{
+    "files.exclude": { //Exclude files from the explorer
+		"**/.dep": true,
+		"**/build/lst": true,
+		"**/build/obj": true,
+	},
+	"search.exclude": { //Exclude files from search
+		"**/.dep": true,
+		"**/build/lst": true,
+		"**/build/obj": true,
+		"**/ChibiOS/demos": true,
+	},
+	"files.associations": {
+		"*.inc": "cpp",
+		"hal.h": "c"
+	},
+}
