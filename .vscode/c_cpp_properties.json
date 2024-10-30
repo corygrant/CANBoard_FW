@@ -1,0 +1,50 @@
+{
+    "configurations": [
+        {
+            "name": "STM32-ChibiOS",
+            "compilerPath": "/home/cgrant/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-arm",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/ChibiOS/os/common/ext/ARM/CMSIS/Core/Include",
+                "${workspaceFolder}/ChibiOS/os/common/ext/ST/STM32F3xx",
+                "${workspaceFolder}/ChibiOS/os/common/portability/GCC",
+                "${workspaceFolder}/ChibiOS/os/common/ports/ARM-common",
+                "${workspaceFolder}/ChibiOS/os/common/ports/ARMv7-M",
+                "${workspaceFolder}/ChibiOS/os/common/startup/ARMCMx/compilers/GCC",
+                "${workspaceFolder}/ChibiOS/os/common/startup/ARMCMx/devices/STM32F3xx",
+                "${workspaceFolder}/ChibiOS/os/hal/include",
+                "${workspaceFolder}/ChibiOS/os/hal/osal/rt-nil",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/ADCv3",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/CANv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/DACv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/DMAv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/EXTIv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/GPIOv2",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/I2Cv2",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/RTCv2",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/SPIv2",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/SYSTICKv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/TIMv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/USART",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/USARTv2",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/USBv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/LLD/xWDGv1",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/STM32/STM32F3xx",
+                "${workspaceFolder}/ChibiOS/os/hal/ports/common/ARMCMx",
+                "${workspaceFolder}/ChibiOS/os/license",
+                "${workspaceFolder}/ChibiOS/os/oslib/include",
+                "${workspaceFolder}/ChibiOS/os/rt/include",
+                "${workspaceFolder}/ChibiOS/os/test/include",
+                "${workspaceFolder}/ChibiOS/test/oslib/source/test",
+                "${workspaceFolder}/ChibiOS/test/rt/source/test",
+                "${workspaceFolder}/cfg",
+                "${workspaceFolder}/boards/canboard_v2"
+            ]
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}
