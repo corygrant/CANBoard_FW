@@ -10,11 +10,13 @@ CANBoard is a simple CAN enabled IO board, specifically designed to be used in d
     * 0.5A max each
 * STM32F303K8
 
-# Versions
-Current software versions used:
-* CubeIDE V1.11.2
-* CubeMX V6.7.0
-* FW_F3 V1.11.3
+# Hardware
+[CANBoard hardware](https://github.com/corygrant/CANBoard_HW)
+
+# Firmware Versions
+CANBoard firmware uses ChibiOS as of v2.0.0
+
+The original ST HAL FreeRTOS version of the firmware can be found on the branch: original-fw/st-hal-freertos
 
 # Goals
 - Create a low cost device that my friends and I can use in our project cars
@@ -28,6 +30,8 @@ This is a personal hobby project. I am not a professional. Use at your own risk.
 
 # CAN
 Currently configured as 500 Kbps only
+
+Can be changed by modifying /boards/port.cpp
 
 # Message Format - Inputs
 Messages sent from the CANBoard
@@ -53,5 +57,4 @@ Messages sent to the CANBoard
 
 * **Outputs** : must be value 1 or 0
 
-# Hardware
-[CANBoard hardware](https://github.com/corygrant/CANBoard_HW)
+
