@@ -27,10 +27,10 @@ void CanTxThread(void*)
         canTxMsg.IDE = CAN_IDE_STD;
         canTxMsg.SID = CAN_BASE_ID + nCanBaseIdOffset + 0;
         canTxMsg.DLC = 8;
-        canTxMsg.data16[0] = (uint16_t)((float)GetAdcRaw(AnIn1) / 4096 * 4850);
-        canTxMsg.data16[1] = (uint16_t)((float)GetAdcRaw(AnIn2) / 4096 * 4850);
-        canTxMsg.data16[2] = (uint16_t)((float)GetAdcRaw(AnIn3) / 4096 * 4850);
-        canTxMsg.data16[3] = (uint16_t)((float)GetAdcRaw(AnIn4) / 4096 * 4850);
+        canTxMsg.data16[0] = (uint16_t)(GetAdcVolts(AnIn1) * 1000);
+        canTxMsg.data16[1] = (uint16_t)(GetAdcVolts(AnIn2) * 1000);
+        canTxMsg.data16[2] = (uint16_t)(GetAdcVolts(AnIn3) * 1000);
+        canTxMsg.data16[3] = (uint16_t)(GetAdcVolts(AnIn4) * 1000);
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
 
@@ -40,7 +40,7 @@ void CanTxThread(void*)
         canTxMsg.IDE = CAN_IDE_STD;
         canTxMsg.SID = CAN_BASE_ID + nCanBaseIdOffset + 1;
         canTxMsg.DLC = 8;
-        canTxMsg.data16[0] = (uint16_t)((float)GetAdcRaw(AnIn5) / 4096 * 4850);
+        canTxMsg.data16[0] = (uint16_t)(GetAdcVolts(AnIn5) * 1000);
         canTxMsg.data16[1] = 0;
         canTxMsg.data16[2] = 0;
         canTxMsg.data16[3] = GetTemperature();

@@ -72,7 +72,7 @@ void InitAdc()
     adcThread.start(NORMALPRIO);
 }
 
-adcsample_t GetAdcRaw(AnalogChannel channel)
+static adcsample_t GetAdcRaw(AnalogChannel channel)
 {
     switch (channel)
     {
@@ -91,6 +91,23 @@ adcsample_t GetAdcRaw(AnalogChannel channel)
     default:
         return 0; // Invalid channel
     }
+}
+
+static float AdcToVolts(adcsample_t raw)
+{
+    // MCU vRef = 3.3v
+    // 4095 counts full scale
+    float mcuVolts = (3.3 / 4095) * raw;
+
+    const float rUpper = 4700;
+    const float rLower = 10000;
+
+    return mcuVolts * ((rUpper + rLower) / rLower);
+}
+
+float GetAdcVolts(AnalogChannel channel)
+{
+    return AdcToVolts(GetAdcRaw(channel));
 }
 
 uint16_t GetTemperature()

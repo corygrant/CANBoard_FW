@@ -3,59 +3,51 @@
 
 uint8_t nSwPos[5] = {0};
 
-uint8_t CheckSwPos(uint16_t swReading, bool invert)
+uint8_t CheckSwPos(float swVolts)
 {
     //==================================================
     //MODIFY RANGES BASED ON SWITCH READINGS
     //==================================================
-    if(invert){
-      if(swReading > 3300)
-        return 0;
-      if((swReading <= 3300) && (swReading > 2700))
-        return 1;
-      if((swReading <= 2700) && (swReading > 2200))
-        return 2;
-      if((swReading <= 2200) && (swReading > 1800))
-        return 3;
-      if((swReading <= 1800) && (swReading > 1400))
-        return 4;
-      if((swReading <= 1400) && (swReading > 1000))
-        return 5;
-      if((swReading <= 1000) && (swReading > 600))
-        return 6;
-      if(swReading <= 600)
+    if (swVolts > 3.91)
         return 7;
-    }
-    else
-    {
-      if(swReading > 3300)
-        return 7;
-      if((swReading <= 3300) && (swReading > 2700))
+    if (swVolts > 3.20)
         return 6;
-      if((swReading <= 2700) && (swReading > 2200))
+    if (swVolts > 2.60)
         return 5;
-      if((swReading <= 2200) && (swReading > 1800))
+    if (swVolts > 2.13)
         return 4;
-      if((swReading <= 1800) && (swReading > 1400))
+    if (swVolts > 1.66)
         return 3;
-      if((swReading <= 1400) && (swReading > 1000))
+    if (swVolts > 1.18)
         return 2;
-      if((swReading <= 1000) && (swReading > 600))
+    if (swVolts > 0.71)
         return 1;
-      if(swReading <= 600)
-        return 0;
-    }
 
     return 0;
 }
 
+uint8_t CheckSwPos(float swVolts, bool invert)
+{
+    uint8_t pos = CheckSwPos(swVolts);
+
+    if (invert)
+    {
+        // subtract from highest possible switch position, in case your switch has more
+        return CheckSwPos(5) - pos;
+    }
+    else
+    {
+        return pos;
+    }
+}
+
 void UpdateSwPos()
 {
-    nSwPos[0] = CheckSwPos( GetAdcRaw(AnIn1), INVERT_SW_1);
-    nSwPos[1] = CheckSwPos( GetAdcRaw(AnIn2), INVERT_SW_2);
-    nSwPos[2] = CheckSwPos( GetAdcRaw(AnIn3), INVERT_SW_3);
-    nSwPos[3] = CheckSwPos( GetAdcRaw(AnIn4), INVERT_SW_4);
-    nSwPos[4] = CheckSwPos( GetAdcRaw(AnIn5), INVERT_SW_5);
+    nSwPos[0] = CheckSwPos(GetAdcVolts(AnIn1), INVERT_SW_1);
+    nSwPos[1] = CheckSwPos(GetAdcVolts(AnIn2), INVERT_SW_2);
+    nSwPos[2] = CheckSwPos(GetAdcVolts(AnIn3), INVERT_SW_3);
+    nSwPos[3] = CheckSwPos(GetAdcVolts(AnIn4), INVERT_SW_4);
+    nSwPos[4] = CheckSwPos(GetAdcVolts(AnIn5), INVERT_SW_5);
 }
 
 uint8_t GetRotarySwPos(RotarySwInput input)
