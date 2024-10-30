@@ -7,19 +7,10 @@
 #include "analog_switch.h"
 #include "canboard_config.h"
 
-uint8_t nCanBaseIdOffset = 0;
-uint8_t nCanHeartbeat = 0;
+#include <algorithm>
 
-static const CANFilter filters[1] = {
-    {
-        .filter = 0,
-        .mode = 0,
-        .scale = 1,
-        .assignment = 0,
-        .register1 = ((uint32_t)(CAN_BASE_ID + nCanBaseIdOffset + 3) << 21),
-        .register2 = ((uint32_t)0x7FFU << 21) | (1U << 2),
-    },
-};
+static uint8_t nCanBaseIdOffset = 0;
+static uint8_t nCanHeartbeat = 0;
 
 static THD_WORKING_AREA(waCanTxThread, 256);
 void CanTxThread(void*)
@@ -112,7 +103,19 @@ void InitCan()
     //Set CAN base ID
     nCanBaseIdOffset = (GetDigIn(IdSel1) << 4) + (GetDigIn(IdSel2) << 5);
 
-    canSTM32SetFilters(&CAND1, 0, 1, &filters[0]);
+    const CANFilter filters[] =
+    {
+        {
+            .filter = 0,
+            .mode = 0,
+            .scale = 1,
+            .assignment = 0,
+            .register1 = ((uint32_t)(CAN_BASE_ID + nCanBaseIdOffset + 3) << 21),
+            .register2 = ((uint32_t)0x7FFU << 21) | (1U << 2),
+        },
+    };
+
+    canSTM32SetFilters(&CAND1, 0, std::size(filters), filters);
     canStart(&CAND1, &GetCanConfig());
     chThdCreateStatic(waCanTxThread, sizeof(waCanTxThread), NORMALPRIO + 1, CanTxThread, nullptr);
     chThdCreateStatic(waCanRxThread, sizeof(waCanRxThread), NORMALPRIO + 1, CanRxThread, nullptr);
