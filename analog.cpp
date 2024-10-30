@@ -1,20 +1,17 @@
 #include "analog.h"
-#include "ch.h"
+#include "ch.hpp"
 #include "hal.h"
 #include "port.h"
 
 adcsample_t adc1_samples[ADC1_NUM_CHANNELS] = {0};
 adcsample_t adc2_samples[ADC2_NUM_CHANNELS] = {0};
 
-msg_t adc1Result;
-msg_t adc2Result;
-
 static const ADCConversionGroup adc1_cfg = {
-    .circular = true,
+    .circular = false,
     .num_channels = ADC1_NUM_CHANNELS,
     .end_cb = NULL,
     .error_cb = NULL,
-    .cfgr = ADC_CFGR_CONT | ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS, // CFGR: Configuration register
+    .cfgr = ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS, // CFGR: Configuration register
     .tr1 = ADC_TR_DISABLED,                                        // TR1: Watchdog threshold 1 register
     .tr2 = ADC_TR_DISABLED,                                        // TR2: Watchdog threshold 2 register
     .tr3 = ADC_TR_DISABLED,                                        // TR3: Watchdog threshold 3 register
@@ -34,11 +31,11 @@ static const ADCConversionGroup adc1_cfg = {
             0}};
 
 static const ADCConversionGroup adc2_cfg = {
-    .circular = true,
+    .circular = false,
     .num_channels = ADC2_NUM_CHANNELS,
     .end_cb = NULL,
     .error_cb = NULL,
-    .cfgr = ADC_CFGR_CONT | ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS, // CFGR: Configuration register
+    .cfgr = ADC_CFGR_OVRMOD | ADC_CFGR_RES_12BITS, // CFGR: Configuration register
     .tr1 = ADC_TR_DISABLED,                                        // TR1: Watchdog threshold 1 register
     .tr2 = ADC_TR_DISABLED,                                        // TR2: Watchdog threshold 2 register
     .tr3 = ADC_TR_DISABLED,                                        // TR3: Watchdog threshold 3 register
@@ -52,6 +49,19 @@ static const ADCConversionGroup adc2_cfg = {
             0} // SQR: Regular sequence register
 };
 
+struct AdcThread : chibios_rt::BaseStaticThread<256>
+{
+    void main()
+    {
+        adcConvert(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
+        adcConvert(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
+
+        chThdSleepMilliseconds(10);
+    }
+};
+
+static AdcThread adcThread;
+
 void InitAdc()
 {
     adcStart(&ADCD1, NULL);
@@ -59,8 +69,7 @@ void InitAdc()
 
     adcStart(&ADCD2, NULL);
 
-    adcStartConversion(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
-    adcStartConversion(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
+    adcThread.start(NORMALPRIO);
 }
 
 adcsample_t GetAdcRaw(AnalogChannel channel)
