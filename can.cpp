@@ -7,19 +7,10 @@
 #include "analog_switch.h"
 #include "canboard_config.h"
 
-uint8_t nCanBaseIdOffset = 0;
-uint8_t nCanHeartbeat = 0;
+#include <algorithm>
 
-static const CANFilter filters[1] = {
-    {
-        .filter = 0,
-        .mode = 0,
-        .scale = 1,
-        .assignment = 0,
-        .register1 = ((uint32_t)(CAN_BASE_ID + nCanBaseIdOffset + 3) << 21),
-        .register2 = ((uint32_t)0x7FFU << 21) | (1U << 2),
-    },
-};
+static uint8_t nCanBaseIdOffset = 0;
+static uint8_t nCanHeartbeat = 0;
 
 static THD_WORKING_AREA(waCanTxThread, 256);
 void CanTxThread(void*)
@@ -43,8 +34,6 @@ void CanTxThread(void*)
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
 
-        chThdSleepMilliseconds(CAN_TX_MSG_SPLIT);
-
         //=======================================================
         //Msg 1 (Analog input 5 millivolts and temperature)
         //=======================================================
@@ -57,8 +46,6 @@ void CanTxThread(void*)
         canTxMsg.data16[3] = GetTemperature();
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
-
-        chThdSleepMilliseconds(CAN_TX_MSG_DELAY);
 
         //=======================================================
         //Msg 2 (Rotary switches, dig inputs, analog input switches, low side output status, heartbeat)
@@ -97,7 +84,10 @@ static THD_FUNCTION(CanRxThread, p)
     {
         msg_t msg = canReceiveTimeout(&CAND1, CAN_ANY_MAILBOX, &canRxMsg, TIME_INFINITE);
         if (msg != MSG_OK)
+        {
             continue;
+        }
+
         if (canRxMsg.DLC >= 4)
         {
             SetDigOut(DigOut1, (bool)(canRxMsg.data8[0] & 0x01));
@@ -105,7 +95,6 @@ static THD_FUNCTION(CanRxThread, p)
             SetDigOut(DigOut3, (bool)(canRxMsg.data8[2] & 0x01));
             SetDigOut(DigOut4, (bool)(canRxMsg.data8[3] & 0x01));
         }
-        chThdSleepMilliseconds(10);
     }
 }
 
@@ -114,7 +103,19 @@ void InitCan()
     //Set CAN base ID
     nCanBaseIdOffset = (GetDigIn(IdSel1) << 4) + (GetDigIn(IdSel2) << 5);
 
-    canSTM32SetFilters(&CAND1, 0, 1, &filters[0]);
+    const CANFilter filters[] =
+    {
+        {
+            .filter = 0,
+            .mode = 0,
+            .scale = 1,
+            .assignment = 0,
+            .register1 = ((uint32_t)(CAN_BASE_ID + nCanBaseIdOffset + 3) << 21),
+            .register2 = ((uint32_t)0x7FFU << 21) | (1U << 2),
+        },
+    };
+
+    canSTM32SetFilters(&CAND1, 0, std::size(filters), filters);
     canStart(&CAND1, &GetCanConfig());
     chThdCreateStatic(waCanTxThread, sizeof(waCanTxThread), NORMALPRIO + 1, CanTxThread, nullptr);
     chThdCreateStatic(waCanRxThread, sizeof(waCanRxThread), NORMALPRIO + 1, CanRxThread, nullptr);

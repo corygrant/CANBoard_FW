@@ -6,5 +6,4 @@
 
 #define CAN_BASE_ID 0x640
 
-#define CAN_TX_MSG_DELAY 50
-#define CAN_TX_MSG_SPLIT 5
+#define CAN_TX_MSG_DELAY 100
