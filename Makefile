@@ -11,7 +11,9 @@ BOARDDIR = boards/$(BOARD)
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16
+  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fsingle-precision-constant
+#           ^^^
+# If planning to attach a debugger, change to -O0
 endif
 
 # C specific options here (added to USE_OPT).
@@ -21,7 +23,7 @@ endif
 
 # C++ specific options here (added to USE_OPT).
 ifeq ($(USE_CPPOPT),)
-  USE_CPPOPT = -fno-rtti
+  USE_CPPOPT = -std=c++20 -Wno-register -fno-rtti -fno-threadsafe-statics -fno-exceptions -fno-use-cxa-atexit -Wno-deprecated -Werror=shadow
 endif
 
 # Enable this if you want the linker to remove unused code and data.
@@ -72,7 +74,7 @@ endif
 
 # Enables the use of FPU (no, softfp, hard).
 ifeq ($(USE_FPU),)
-  USE_FPU = no
+  USE_FPU = hard
 endif
 
 # FPU-related options.
