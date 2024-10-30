@@ -43,8 +43,6 @@ void CanTxThread(void*)
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
 
-        chThdSleepMilliseconds(CAN_TX_MSG_SPLIT);
-
         //=======================================================
         //Msg 1 (Analog input 5 millivolts and temperature)
         //=======================================================
@@ -57,8 +55,6 @@ void CanTxThread(void*)
         canTxMsg.data16[3] = GetTemperature();
 
         canTransmitTimeout(&CAND1, CAN_ANY_MAILBOX, &canTxMsg, TIME_INFINITE);
-
-        chThdSleepMilliseconds(CAN_TX_MSG_DELAY);
 
         //=======================================================
         //Msg 2 (Rotary switches, dig inputs, analog input switches, low side output status, heartbeat)
