@@ -11,19 +11,18 @@
 /*
  * Application entry point.
  */
-int main(void) {
+int main(void)
+{
 
   halInit();
   chSysInit();
 
   InitCan();
   InitAdc();
-  
-  while (true) {
-    
-    //Set digital outputs
 
-    UpdateSwPos();    
+  while (true)
+  {
+    UpdateSwPos();
     chThdSleepMilliseconds(500);
   }
 }
