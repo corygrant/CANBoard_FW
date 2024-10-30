@@ -93,7 +93,10 @@ static THD_FUNCTION(CanRxThread, p)
     {
         msg_t msg = canReceiveTimeout(&CAND1, CAN_ANY_MAILBOX, &canRxMsg, TIME_INFINITE);
         if (msg != MSG_OK)
+        {
             continue;
+        }
+
         if (canRxMsg.DLC >= 4)
         {
             SetDigOut(DigOut1, (bool)(canRxMsg.data8[0] & 0x01));
@@ -101,7 +104,6 @@ static THD_FUNCTION(CanRxThread, p)
             SetDigOut(DigOut3, (bool)(canRxMsg.data8[2] & 0x01));
             SetDigOut(DigOut4, (bool)(canRxMsg.data8[3] & 0x01));
         }
-        chThdSleepMilliseconds(10);
     }
 }
 
