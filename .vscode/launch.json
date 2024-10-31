@@ -3,7 +3,7 @@
     "configurations": [
         {
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceFolder}/build/CANBoard_Chibi.elf",
+            "executable": "${workspaceFolder}/build/CANBoard.elf",
             "name": "Debug with OpenOCD",
             "request": "launch",
             "type": "cortex-debug",
