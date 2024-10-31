@@ -53,10 +53,13 @@ struct AdcThread : chibios_rt::BaseStaticThread<256>
 {
     void main()
     {
-        adcConvert(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
-        adcConvert(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
+        while (true)
+        {
+            adcConvert(&ADCD1, &adc1_cfg, adc1_samples, ADC1_BUF_DEPTH);
+            adcConvert(&ADCD2, &adc2_cfg, adc2_samples, ADC2_BUF_DEPTH);
 
-        chThdSleepMilliseconds(10);
+            chThdSleepMilliseconds(10);
+        }
     }
 };
 
