@@ -2,7 +2,7 @@
     "configurations": [
         {
             "name": "STM32-ChibiOS",
-            "compilerPath": "/home/cgrant/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+            "compilerPath": "C:/arm-gnu-toolchain-13.3.rel1-mingw-w64-i686-arm-none-eabi/bin/arm-none-eabi-gcc.exe",
             "cStandard": "c17",
             "cppStandard": "c++17",
             "intelliSenseMode": "gcc-arm",

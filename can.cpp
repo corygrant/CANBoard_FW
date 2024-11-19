@@ -7,7 +7,7 @@
 #include "analog_switch.h"
 #include "canboard_config.h"
 
-#include <algorithm>
+#include <iterator>
 
 static uint8_t nCanBaseIdOffset = 0;
 static uint8_t nCanHeartbeat = 0;
