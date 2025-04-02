@@ -2,7 +2,7 @@
 
 #define MAJOR_VERSION 2
 #define MINOR_VERSION 1
-#define BUILD 1
+#define BUILD 2
 
 #define CAN_BASE_ID 0x640
 
