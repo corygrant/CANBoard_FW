@@ -7,3 +7,8 @@ build/
 
 # cortex-debug vscode extension local state
 .vscode/.cortex-debug*state.json
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
