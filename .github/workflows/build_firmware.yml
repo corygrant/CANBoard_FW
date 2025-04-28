@@ -1,0 +1,111 @@
+name: Build Firmware
+
+on:
+  push:
+    #branches: [ main, master ]
+    paths:
+      - "canboard_config.h"
+      - "**/*.c"
+      - "**/*.h"
+      - "Makefile"
+      - ".github/workflows/build_firmware.yml"
+  pull_request:
+    paths:
+      - "canboard_config.h"
+      - "**/*.c"
+      - "**/*.h"
+      - "Makefile"
+      - ".github/workflows/build_firmware.yml"
+  workflow_dispatch:
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          submodules: recursive
+
+      - name: Extract version number
+        id: extract_version
+        run: |
+          MAJOR=$(grep '#define MAJOR_VERSION' canboard_config.h | awk '{print $3}')
+          MINOR=$(grep '#define MINOR_VERSION' canboard_config.h | awk '{print $3}')
+          BUILD=$(grep '#define BUILD' canboard_config.h | awk '{print $3}')
+          VERSION="${MAJOR}.${MINOR}.${BUILD}"
+          VERSION_DASHED="${MAJOR}-${MINOR}-${BUILD}"
+
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          echo "VERSION_DASHED=$VERSION_DASHED" >> $GITHUB_ENV
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "version_dashed=$VERSION_DASHED" >> $GITHUB_OUTPUT
+
+          if [ "$MAJOR" -eq 0 ]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Check if release already exists
+        id: check_release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          VERSION="v${{ steps.extract_version.outputs.version }}"
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "Authorization: token $GH_TOKEN" \
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/$VERSION)
+
+          if [ "$RESPONSE" == "200" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Download & Install ARM GCC Toolchain
+        if: steps.check_release.outputs.exists == 'false'
+        run: |
+          wget 'https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz' -O compiler.tar.xz
+          tar -xf compiler.tar.xz
+          echo "$(pwd)/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
+
+      - name: Verify Compiler
+        if: steps.check_release.outputs.exists == 'false'
+        run: arm-none-eabi-gcc -v
+
+      - name: Build Firmware Variants
+        if: steps.check_release.outputs.exists == 'false'
+        run: |
+          set -e
+
+          make clean
+          make
+          cp build/CANBoard.hex build/CANBoard_FW_v${VERSION_DASHED}.hex
+          cp build/CANBoard.bin build/CANBoard_FW_v${VERSION_DASHED}.bin
+          cp build/CANBoard.elf build/CANBoard_FW_v${VERSION_DASHED}.elf
+
+          ls -l build/
+        env:
+          VERSION_DASHED: ${{ steps.extract_version.outputs.version_dashed }}
+
+      - name: Create GitHub Release
+        if: steps.check_release.outputs.exists == 'false'
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: v${{ steps.extract_version.outputs.version }}
+          name: Release v${{ steps.extract_version.outputs.version }}
+          prerelease: ${{ steps.extract_version.outputs.prerelease }}
+          body: |
+            - [HEX](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.hex)
+            - [BIN](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.bin)
+            - [ELF](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.elf)
+            
+          files: |
+            build/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.hex
+            build/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.bin
+            build/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.elf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
