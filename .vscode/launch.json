@@ -4,7 +4,7 @@
         {
             "cwd": "${workspaceFolder}",
             "executable": "${workspaceFolder}/build/CANBoard.elf",
-            "name": "Debug with OpenOCD",
+            "name": "Debug CANBoard",
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "openocd",

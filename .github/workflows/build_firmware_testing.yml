@@ -2,20 +2,20 @@ name: Build Firmware
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [ testing ]
     paths:
       - "canboard_config.h"
       - "**/*.c"
       - "**/*.h"
       - "Makefile"
-      - ".github/workflows/build_firmware.yml"
+      - ".github/workflows/build_firmware_testing.yml"
   pull_request:
     paths:
       - "canboard_config.h"
       - "**/*.c"
       - "**/*.h"
       - "Makefile"
-      - ".github/workflows/build_firmware.yml"
+      - ".github/workflows/build_firmware_testing.yml"
   workflow_dispatch:
 
 jobs:
@@ -42,41 +42,35 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
           echo "version_dashed=$VERSION_DASHED" >> $GITHUB_OUTPUT
 
-          if [ "$MAJOR" -eq 0 ]; then
-            echo "prerelease=true" >> $GITHUB_OUTPUT
-          else
-            echo "prerelease=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Check if release already exists
-        id: check_release
+      - name: Delete existing testing-latest release if present
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          VERSION="v${{ steps.extract_version.outputs.version }}"
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+          RELEASE_ID=$(curl -s \
             -H "Authorization: token $GH_TOKEN" \
-            https://api.github.com/repos/${{ github.repository }}/releases/tags/$VERSION)
+            https://api.github.com/repos/${{ github.repository }}/releases/tags/testing-latest \
+            | jq -r '.id // empty')
 
-          if [ "$RESPONSE" == "200" ]; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
+          if [ -n "$RELEASE_ID" ]; then
+            echo "Deleting existing release $RELEASE_ID"
+            curl -s -X DELETE \
+              -H "Authorization: token $GH_TOKEN" \
+              https://api.github.com/repos/${{ github.repository }}/releases/$RELEASE_ID
           fi
 
+          # Delete the tag so it can be recreated at the new commit
+          git push origin :refs/tags/testing-latest || true
+
       - name: Download & Install ARM GCC Toolchain
-        if: steps.check_release.outputs.exists == 'false'
         run: |
           wget 'https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi.tar.xz' -O compiler.tar.xz
           tar -xf compiler.tar.xz
           echo "$(pwd)/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
 
       - name: Verify Compiler
-        if: steps.check_release.outputs.exists == 'false'
         run: arm-none-eabi-gcc -v
 
       - name: Build Firmware Variants
-        if: steps.check_release.outputs.exists == 'false'
         run: |
           set -e
 
@@ -90,18 +84,21 @@ jobs:
         env:
           VERSION_DASHED: ${{ steps.extract_version.outputs.version_dashed }}
 
-      - name: Create GitHub Release
-        if: steps.check_release.outputs.exists == 'false'
+      - name: Create GitHub Pre-Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ steps.extract_version.outputs.version }}
-          name: Release v${{ steps.extract_version.outputs.version }}
-          prerelease: ${{ steps.extract_version.outputs.prerelease }}
-          generate_release_notes: true
+          tag_name: testing-latest
+          name: Testing v${{ steps.extract_version.outputs.version }}
+          prerelease: true
           body: |
-            - [HEX](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.hex)
-            - [BIN](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.bin)
-            - [ELF](https://github.com/${{ github.repository }}/releases/download/v${{ steps.extract_version.outputs.version }}/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.elf)
+            ## Testing Pre-Release v${{ steps.extract_version.outputs.version }}
+
+            > [!WARNING]
+            > This is a testing build and may be unstable.
+
+            - [HEX](https://github.com/${{ github.repository }}/releases/download/testing-latest/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.hex)
+            - [BIN](https://github.com/${{ github.repository }}/releases/download/testing-latest/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.bin)
+            - [ELF](https://github.com/${{ github.repository }}/releases/download/testing-latest/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.elf)
             
           files: |
             build/CANBoard_FW_v${{ steps.extract_version.outputs.version_dashed }}.hex
