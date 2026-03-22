@@ -1,7 +1,7 @@
 #include "can.h"
 #include "hal.h"
 #include "port.h"
-#include "dingopdm_config.h"
+#include "canboard_config.h"
 #include "mailbox.h"
 #include "msg.h"
 
@@ -91,24 +91,6 @@ void CanRxThread(void *)
             nLastCanRxTime = SYS_TIME;
 
             res = PostRxFrame(&msg);
-
-            if(stConfig.stDevConfig.bConnectUsbToCan)
-            {
-                //Copy data to USB for data pass through
-                //Don't send if it's a settings msg for this device
-                if((msg.SID != stConfig.stDevConfig.nParamRxId) && (msg.SID != stConfig.stDevConfig.nParamTxId)) 
-                {
-                    //If USB not connected, mailbox will fill up and messages will be dropped
-                    usbTx.SID = msg.SID;
-                    usbTx.IDE = msg.IDE;
-                    usbTx.DLC = msg.DLC;
-                    for(size_t i = 0; i < msg.DLC; i++)
-                        usbTx.data8[i] = msg.data8[i];
-                    res = PostTxUsbFrame(&usbTx);
-                }
-            }
-
-            palToggleLine(LINE_E2);
         }
 
         if (chThdShouldTerminateX())

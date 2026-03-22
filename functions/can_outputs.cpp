@@ -2,10 +2,10 @@
 #include "mailbox.h"
 #include "dbc.h"
 
-Config_CanOutput* CanOutputs::pConfigs[PDM_NUM_CAN_OUTPUTS];
-float* CanOutputs::pInput[PDM_NUM_CAN_OUTPUTS];
+Config_CanOutput* CanOutputs::pConfigs[NUM_CAN_OUTPUTS];
+float* CanOutputs::pInput[NUM_CAN_OUTPUTS];
 CanOutput CanOutputs::canOut[CAN_OUT_FRAMES];
-int8_t CanOutputs::nAssignedOut[PDM_NUM_CAN_OUTPUTS];
+int8_t CanOutputs::nAssignedOut[NUM_CAN_OUTPUTS];
 
 void CanOutputs::ClearFrames()
 {
@@ -17,7 +17,7 @@ void CanOutputs::ClearFrames()
         canOut[i].stFrame.EID = 0; //Clears SID as well, union
     }
 
-    for (int i = 0; i < PDM_NUM_CAN_OUTPUTS; ++i)
+    for (int i = 0; i < NUM_CAN_OUTPUTS; ++i)
     {
         nAssignedOut[i] = -1;
     }
@@ -27,7 +27,7 @@ void CanOutputs::InitAllFrames()
 {
     ClearFrames();
 
-    for (int i = 0; i < PDM_NUM_CAN_OUTPUTS; ++i)
+    for (int i = 0; i < NUM_CAN_OUTPUTS; ++i)
     {
         if (!pConfigs[i]->bEnabled) continue;
 
@@ -98,7 +98,7 @@ void CanOutputs::Update()
         if(canOut[i].CheckTxTime())
         {
             // Update data from all assigned outputs before sending
-            for (int j = 0; j < PDM_NUM_CAN_OUTPUTS; ++j)
+            for (int j = 0; j < NUM_CAN_OUTPUTS; ++j)
             {
                 if (nAssignedOut[j] == i)
                 {

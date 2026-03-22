@@ -2,9 +2,9 @@
 
 #include <cstdint>
 #include "config.h"
-#include "dingopdm_config.h"
+#include "canboard_config.h"
 
-extern float *pVarMap[PDM_VAR_MAP_SIZE];
+extern float *pVarMap[VAR_MAP_SIZE];
 
 class Counter
 {

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include "config.h"
 
-extern float *pVarMap[PDM_VAR_MAP_SIZE];
+extern float *pVarMap[VAR_MAP_SIZE];
 
 class Flasher
 {

@@ -7,11 +7,13 @@ ifeq ($(BOARD),)
   BOARD = canboard_v2
 endif
 
+$(info BOARD is set to: $(BOARD))
+
 BOARDDIR = boards/$(BOARD)
 
 # Compiler options here.
 ifeq ($(USE_OPT),)
-  USE_OPT = -O2 -ggdb -fomit-frame-pointer -falign-functions=16 -fsingle-precision-constant
+  USE_OPT = -O0 -ggdb -fomit-frame-pointer -falign-functions=16 -fsingle-precision-constant
 #           ^^^
 # If planning to attach a debugger, change to -O0
 endif
@@ -91,7 +93,7 @@ endif
 #
 
 # Define project name here
-PROJECT = CANBoard
+PROJECT = $(BOARD)
 
 # Target settings.
 MCU  = cortex-m4
@@ -126,12 +128,32 @@ CSRC = $(ALLCSRC)
 # setting.
 CPPSRC = $(ALLCPPSRC) \
          $(BOARDDIR)/port.cpp \
-         can.cpp \
-         analog.cpp \
-         digital.cpp \
-         rotary_switch.cpp \
-         analog_switch.cpp \
-         main.cpp
+         $(BOARDDIR)/msg.cpp \
+				 $(BOARDDIR)/hw_devices.cpp \
+				 comms/can.cpp \
+				 comms/infomsg.cpp \
+				 comms/mailbox.cpp \
+				 comms/request_msg.cpp \
+				 core/config.cpp \
+				 core/config_handler.cpp \
+				 core/error.cpp \
+				 core/param_protocol.cpp \
+				 core/param_registry.cpp \
+				 core/canboard.cpp \
+				 functions/analog.cpp \
+				 functions/analog_switch.cpp \
+				 functions/can_input.cpp \
+				 functions/can_outputs.cpp \
+				 functions/condition.cpp \
+				 functions/counter.cpp \
+				 functions/digital.cpp \
+				 functions/flasher.cpp \
+				 functions/input.cpp \
+         		 functions/rotary_switch.cpp \
+				 functions/virtual_input.cpp \
+				 utils/crc.cpp \
+				 utils/dbc.cpp \
+         		 main.cpp
          
 
 # List ASM source files here.
@@ -164,8 +186,12 @@ UDEFS =
 UADEFS =
 
 # List all user directories here
-UINCDIR =
-
+UINCDIR = ./boards/$(MCU) \
+				  ./comms \
+				  ./core \
+				  ./functions \
+				  ./utils
+          
 # List the user directory to look for the libraries here
 ULIBDIR =
 

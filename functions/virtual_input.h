@@ -4,7 +4,7 @@
 #include "config.h"
 #include "input.h"
 
-extern float *pVarMap[PDM_VAR_MAP_SIZE];
+extern float *pVarMap[VAR_MAP_SIZE];
 
 class VirtualInput
 {

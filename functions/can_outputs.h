@@ -6,9 +6,9 @@
 #include "can_output.h"
 
 // Same value, used to show difference in intent between number of frames vs number of outputs
-#define CAN_OUT_FRAMES PDM_NUM_CAN_OUTPUTS // Max possible frames is when all outputs have unique IDs
+#define CAN_OUT_FRAMES NUM_CAN_OUTPUTS // Max possible frames is when all outputs have unique IDs
 
-extern float *pVarMap[PDM_VAR_MAP_SIZE];
+extern float *pVarMap[VAR_MAP_SIZE];
 
 class CanOutputs
 {
@@ -17,7 +17,7 @@ public:
     static const uint16_t nBaseIndex = 0x2000;
 
     static void SetConfig(Config_CanOutput config[]) {
-        for(uint8_t i = 0; i < PDM_NUM_CAN_OUTPUTS; i++) {
+        for(uint8_t i = 0; i < NUM_CAN_OUTPUTS; i++) {
             pConfigs[i] = &config[i];
             pInput[i] = pVarMap[config[i].nInput];
         }
@@ -27,14 +27,14 @@ public:
     static void Update();
 
 private:
-    static Config_CanOutput* pConfigs[PDM_NUM_CAN_OUTPUTS];
+    static Config_CanOutput* pConfigs[NUM_CAN_OUTPUTS];
 
-    static float *pInput[PDM_NUM_CAN_OUTPUTS];
+    static float *pInput[NUM_CAN_OUTPUTS];
 
     static CanOutput canOut[CAN_OUT_FRAMES];
     
     // Frame indexes are independent of CAN output indexes, multiple outputs may be packed into the same frame based on ID
-    static int8_t nAssignedOut[PDM_NUM_CAN_OUTPUTS]; // Maps CAN output index to frame index, -1 if not assigned
+    static int8_t nAssignedOut[NUM_CAN_OUTPUTS]; // Maps CAN output index to frame index, -1 if not assigned
 
     static void CheckTime(uint8_t index);
     static void ClearFrames();
