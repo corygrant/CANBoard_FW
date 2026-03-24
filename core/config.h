@@ -24,6 +24,11 @@ struct Config_Input{
   InputPull ePull;
 };
 
+struct Config_Output{
+  bool bEnabled;
+  uint16_t nInput;
+};
+
 struct Config_VirtualInput{
   bool bEnabled;
   bool bNot0;

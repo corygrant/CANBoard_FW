@@ -5,10 +5,10 @@
 #include "config.h"
 #include "input.h"
 
-class Digital
+class Digital_Input
 {
 public:
-    Digital(ioline_t line)
+    Digital_Input(ioline_t line)
         : m_line(line)
     {};
 

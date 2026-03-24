@@ -6,7 +6,7 @@
 #define STM32_TEMP_3V3_110C *((uint16_t*)0x1FFFF7C2)
 
 #define NUM_OUTPUTS 4
-#define NUM_INPUTS 2
+#define NUM_INPUTS 10
 #define NUM_VIRT_INPUTS 16
 #define NUM_CAN_INPUTS 32
 #define NUM_CAN_OUTPUTS 32
@@ -29,8 +29,11 @@
 
 #define NUM_TX_MSGS 3
 
-#define ADC1_NUM_CHANNELS 8
+#define ADC1_NUM_CHANNELS 5
 #define ADC1_BUF_DEPTH 1
+
+#define ADC2_NUM_CHANNELS   1
+#define ADC2_BUF_DEPTH      1
 
 #define SYS_TIME TIME_I2MS(chVTGetSystemTimeX())
 
@@ -39,16 +42,17 @@ static const float ALWAYS_TRUE = 1.0f;
  
 enum class AnalogChannel
 {
-    AI1 = 0,
-    AI2,
-    AI3,
-    AI4,
-    VRefInt
+    AnIn1 = 0,
+    AnIn2,
+    AnIn3,
+    AnIn4,
+    AnIn5,
+    TempSensor
 };
 
 const CANConfig &GetCanConfig(CanBitrate bitrate);
 
 msg_t InitAdc();
-void DeInitAdc();
 uint16_t GetAdcRaw(AnalogChannel channel);
-float GetVDDA();
+float GetAdcVolts(AnalogChannel channel);
+uint16_t GetTemperature();

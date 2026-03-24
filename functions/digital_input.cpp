@@ -1,8 +1,8 @@
-#include "digital.h"
+#include "digital_input.h"
 #include "dbc.h"
 #include "input.h"
 
-void Digital::Update()
+void Digital_Input::Update()
 {
     if(!pConfig->bEnabled)
     {
@@ -32,7 +32,7 @@ void Digital::Update()
     bInit = true;
 }
 
-void Digital::SetPull(InputPull pull)
+void Digital_Input::SetPull(InputPull pull)
 {
     switch (pull)
     {
