@@ -26,7 +26,7 @@ void CanCyclicTxThread(void *)
     while (1)
     {
 
-        for (uint8_t i = 0; i < PDM_NUM_TX_MSGS; i++)
+        for (uint8_t i = 0; i < NUM_TX_MSGS; i++)
         {
             msg = TxMsgs[i]();
             if (!msg.bSend)

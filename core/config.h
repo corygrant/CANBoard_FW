@@ -100,13 +100,13 @@ struct Config_Condition{
 
 struct CanboardConfig{
   Config_DeviceConfig stDevConfig;
-  Config_Input stInput[PDM_NUM_INPUTS];
-  Config_VirtualInput stVirtualInput[PDM_NUM_VIRT_INPUTS];
-  Config_Flasher stFlasher[PDM_NUM_FLASHERS];
-  Config_CanInput stCanInput[PDM_NUM_CAN_INPUTS];
-  Config_CanOutput stCanOutput[PDM_NUM_CAN_OUTPUTS];
-  Config_Counter stCounter[PDM_NUM_COUNTERS];
-  Config_Condition stCondition[PDM_NUM_CONDITIONS];
+  Config_Input stInput[NUM_INPUTS];
+  Config_VirtualInput stVirtualInput[NUM_VIRT_INPUTS];
+  Config_Flasher stFlasher[NUM_FLASHERS];
+  Config_CanInput stCanInput[NUM_CAN_INPUTS];
+  Config_CanOutput stCanOutput[NUM_CAN_OUTPUTS];
+  Config_Counter stCounter[NUM_COUNTERS];
+  Config_Condition stCondition[NUM_CONDITIONS];
 };
 
 extern CanboardConfig stConfig;

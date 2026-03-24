@@ -16,7 +16,7 @@ CANTxMsg TxMsg0();
 CANTxMsg TxMsg1();
 CANTxMsg TxMsg2();
 
-[[maybe_unused]] static CANTxMsg (*TxMsgs[PDM_NUM_TX_MSGS])() = {
+[[maybe_unused]] static CANTxMsg (*TxMsgs[NUM_TX_MSGS])() = {
     TxMsg0,
     TxMsg1,
     TxMsg2

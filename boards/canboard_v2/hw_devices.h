@@ -3,4 +3,4 @@
 #include "port.h"
 #include "digital.h"
 
-extern Digital in[PDM_NUM_INPUTS];
+extern Digital in[NUM_INPUTS];

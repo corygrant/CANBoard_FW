@@ -28,7 +28,7 @@ Condition condition[NUM_CONDITIONS];
 
 CanboardConfig stConfig;
 CanboardConfig stConfigTemp; // Used for staging new config before applying
-float *pVarMap[PDM_VAR_MAP_SIZE];
+float *pVarMap[VAR_MAP_SIZE];
 
 void InitVarMap();
 void CyclicUpdate();

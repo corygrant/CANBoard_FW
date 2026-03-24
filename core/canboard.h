@@ -22,6 +22,6 @@ extern Condition condition[NUM_CONDITIONS];
 
 extern CanboardConfig stConfig;
 extern CanboardConfig stConfigTemp; // Used for staging new config before applying
-extern float *pVarMap[PDM_VAR_MAP_SIZE];
+extern float *pVarMap[VAR_MAP_SIZE];
 
 void InitCanboard();
