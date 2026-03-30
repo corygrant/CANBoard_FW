@@ -4,5 +4,5 @@
 #include "digital_input.h"
 #include "digital_output.h"
 
-extern Digital_Input in[NUM_INPUTS];
-extern Digital_Output out[NUM_OUTPUTS];
+extern Digital_Input digIn[NUM_DIG_INPUTS];
+extern Digital_Output digOut[NUM_DIG_OUTPUTS];

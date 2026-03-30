@@ -1,9 +1,7 @@
 #pragma once
 
 #include "port.h"
-#include "enums.h"
 #include "config.h"
-#include "input.h"
 
 extern float *pVarMap[VAR_MAP_SIZE];
 
@@ -16,7 +14,7 @@ public:
 
     static const uint16_t nBaseIndex = 0x1200;
 
-    void SetConfig(Config_Output *config)
+    void SetConfig(Config_DigOutput *config)
     {
         pConfig = config;
         pInput = pVarMap[config->nInput];
@@ -27,11 +25,9 @@ public:
     float fVal;
 
 private:
-    const ioline_t m_line;
+    const ioline_t m_line; 
 
-    Config_Output *pConfig;
+    Config_DigOutput *pConfig;
 
     float *pInput;
-
-    bool bLast;
 };

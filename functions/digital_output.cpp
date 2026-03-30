@@ -19,6 +19,4 @@ void Digital_Output::Update()
         palWriteLine(m_line, 0);
         fVal = 0;
     }
-
-    fVal = *pInput;
 }

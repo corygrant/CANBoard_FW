@@ -1,12 +1,12 @@
 #include "param_protocol.h"
-#include "dingopdm_config.h"
+#include "canboard_config.h"
 #include "config.h"
 #include "mailbox.h"
 #include "config_handler.h"
 #include "crc.h"
 #include <cstring>
 
-extern PdmConfig stConfig;
+extern CanboardConfig stConfig;
 
 uint16_t nNumWriteParams = 0;
 uint16_t nNumReadParams = 0;

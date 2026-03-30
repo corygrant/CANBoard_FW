@@ -3,15 +3,15 @@
 #include "port.h"
 #include "config.h"
 
-class Analog_Switch
+class Analog_Input
 {
 public:
-    Analog_Switch() {
+    Analog_Input() {
     };
 
     static const uint16_t nBaseIndex = 0x1200;
 
-    void SetConfig(Config_AnalogSwitch *config)
+    void SetConfig(Config_AnalogInput *config)
     {
         pConfig = config;
     }
@@ -19,9 +19,10 @@ public:
     void Update();
 
     float fVal;
+    float fValMillivolts;
 
 private:
-    Config_AnalogSwitch* pConfig;
+    Config_AnalogInput* pConfig;
 
     AnalogChannel channel;
 };

@@ -1,5 +1,16 @@
 #include "analog_switch.h"
 
+void Analog_Switch::Update()
+{
+    if(!pConfig->bEnabled)
+    {
+        fVal = 0;
+        return;
+    }
+
+    fVal = GetAdcRaw(channel) ? 1.0f : 0.0f;
+}
+
 bool GetAnSwitch(AnalogChannel channel) {
     switch(channel)
     {

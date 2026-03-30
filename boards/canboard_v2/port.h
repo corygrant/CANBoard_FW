@@ -5,8 +5,9 @@
 #define STM32_TEMP_3V3_30C  *((uint16_t*)0x1FFFF7B8)
 #define STM32_TEMP_3V3_110C *((uint16_t*)0x1FFFF7C2)
 
-#define NUM_OUTPUTS 4
-#define NUM_INPUTS 10
+#define NUM_DIG_OUTPUTS 4
+#define NUM_DIG_INPUTS 8
+#define NUM_ANALOG_INPUTS 5
 #define NUM_VIRT_INPUTS 16
 #define NUM_CAN_INPUTS 32
 #define NUM_CAN_OUTPUTS 32
@@ -18,10 +19,11 @@
 
 #define VAR_MAP_SIZE ( \
     VAR_MAP_SYS_VARS + \
-    (NUM_INPUTS * 1) + \
+    (NUM_DIG_INPUTS * 1) + \
+    (NUM_ANALOG_INPUTS * 2) + \
     (NUM_CAN_INPUTS * 2) + \
     (NUM_VIRT_INPUTS * 1) + \
-    (NUM_OUTPUTS * 4) + \
+    (NUM_DIG_OUTPUTS * 1) + \
     (NUM_FLASHERS * 1) + \
     (NUM_CONDITIONS * 1) + \
     (NUM_COUNTERS * 1)\

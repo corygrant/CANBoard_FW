@@ -95,11 +95,14 @@ void CyclicUpdate()
         }
     }
 
-    for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
-        pf[i].Update(starter.fVal[i]);
+    for (uint8_t i = 0; i < NUM_DIG_INPUTS; i++)
+        digIn[i].Update();
 
-    for (uint8_t i = 0; i < NUM_INPUTS; i++)
-        in[i].Update();
+    for (uint8_t i = 0; i < NUM_DIG_OUTPUTS; i++)
+        digOut[i].Update();
+
+    for (uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
+        analogIn[i].Update();
 
     for (uint8_t i = 0; i < NUM_CAN_INPUTS; i++)
         canIn[i].CheckTimeout();

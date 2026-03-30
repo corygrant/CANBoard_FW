@@ -1,5 +1,4 @@
 #include "digital_input.h"
-#include "dbc.h"
 #include "input.h"
 
 void Digital_Input::Update()

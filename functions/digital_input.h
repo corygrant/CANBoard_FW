@@ -3,7 +3,6 @@
 #include "port.h"
 #include "enums.h"
 #include "config.h"
-#include "input.h"
 
 class Digital_Input
 {
@@ -14,7 +13,7 @@ public:
 
     static const uint16_t nBaseIndex = 0x1200;
 
-    void SetConfig(Config_Input *config)
+    void SetConfig(Config_DigInput *config)
     {
         pConfig = config;
 
@@ -30,7 +29,7 @@ private:
 
     void SetPull(InputPull pull);
 
-    Config_Input *pConfig;
+    Config_DigInput *pConfig;
 
     Input input;
 
