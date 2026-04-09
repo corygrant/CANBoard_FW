@@ -12,7 +12,7 @@ public:
         : m_line(line)
     {};
 
-    static const uint16_t nBaseIndex = 0x1200;
+    static const uint16_t nBaseIndex = 0x2100;
 
     void SetConfig(Config_DigOutput *config)
     {

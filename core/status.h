@@ -4,13 +4,12 @@
 #include "enums.h"
 #include "dbc.h"
 
-uint8_t GetCanOffset();
-uint8_t GetHearbeat();
-
 bool GetInputVal(uint8_t nInput);
-
-float GetOutputCurrent(uint8_t nOutput);
 bool GetOutputState(uint8_t nOutput);
+uint16_t GetAnalogInputVal(uint8_t nInput);
+float GetAnalogInputMv(uint8_t nInput);
+uint8_t GetRotarySwitchPos(uint8_t nInput);
+bool GetAnalogSwitchVal(uint8_t nInput);
 
 bool GetAnyCanInEnable();
 bool GetAnyVirtInEnable();

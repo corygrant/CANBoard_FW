@@ -8,6 +8,9 @@
 #include "config_handler.h"
 #include "hw_devices.h"
 #include "can.h"
+#include "digital_input.h"
+#include "digital_output.h"
+#include "analog_input.h"
 #include "can_input.h"
 #include "can_outputs.h"
 #include "virtual_input.h"
@@ -18,7 +21,9 @@
 #include "msg.h"
 #include "request_msg.h"
 #include "infomsg.h"
+#include "error.h"
 
+Analog_Input analogIn[NUM_ANALOG_INPUTS];
 CanInput canIn[NUM_CAN_INPUTS];
 CanOutputs canOutputs;
 VirtualInput virtIn[NUM_VIRT_INPUTS];
@@ -30,11 +35,13 @@ CanboardConfig stConfig;
 CanboardConfig stConfigTemp; // Used for staging new config before applying
 float *pVarMap[VAR_MAP_SIZE];
 
+uint16_t nBaseIdOffset = 0;
+
 void InitVarMap();
 void CyclicUpdate();
 void States();
 
-struct CanboardThread : chibios_rt::BaseStaticThread<2048>
+struct CanboardThread : chibios_rt::BaseStaticThread<512>
 {
     void main()
     {
@@ -124,9 +131,9 @@ void CyclicUpdate()
     CheckInfoMsgs();
 
     //Set CAN base ID
-    nCanBaseIdOffset = (GetDigIn(IdSel1) << 4) + (GetDigIn(IdSel2) << 5);
-
-    
+    uint8_t idSel0 = static_cast<uint8_t>(idSel[0].fVal);
+    uint8_t idSel1 = static_cast<uint8_t>(idSel[1].fVal);
+    nBaseIdOffset = ((idSel0 & 0x01) << 4) + ((idSel1 & 0x01) << 5);
 }
 
 void InitVarMap()
@@ -138,8 +145,16 @@ void InitVarMap()
     pVarMap[index++] = const_cast<float*>(&ALWAYS_TRUE);
 
     // Digital inputs
-    for (uint8_t i = 0; i < NUM_INPUTS; i++)
-        pVarMap[index++] = &in[i].fVal;
+    for (uint8_t i = 0; i < NUM_DIG_INPUTS; i++)
+        pVarMap[index++] = &digIn[i].fVal;
+
+    // Digital outputs
+    for (uint8_t i = 0; i < NUM_DIG_OUTPUTS; i++)
+        pVarMap[index++] = &digOut[i].fVal;
+
+    // Analog inputs
+    for (uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
+        pVarMap[index++] = &analogIn[i].fVal;
 
     // CAN Inputs
     for (uint8_t i = 0; i < NUM_CAN_INPUTS; i++)
@@ -152,12 +167,6 @@ void InitVarMap()
     for (uint8_t i = 0; i < NUM_VIRT_INPUTS; i++)
     {
         pVarMap[index++] = &virtIn[i].fVal;
-    }
-
-    // Outputs
-    for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
-    {
-        pVarMap[index++] = &pf[i].fOutput;
     }
 
     // Flashers
@@ -179,7 +188,12 @@ void InitVarMap()
     }
 
     //VarMap size must match the expected size
-    if (index != PDM_VAR_MAP_SIZE)
+    if (index != VAR_MAP_SIZE)
         Error::SetFatalError(FatalErrorType::ErrVarMap, MsgSrc::Init);
 
+}
+
+uint8_t GetCanOffset()
+{
+    return nBaseIdOffset;
 }

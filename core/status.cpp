@@ -2,45 +2,61 @@
 #include "canboard.h"
 #include "config.h"
 #include "canboard_config.h"
-#include "digital.h"
+#include "digital_input.h"
+#include "digital_output.h"
+#include "analog_input.h"
 #include "can_input.h"
 #include "virtual_input.h"
 #include "flasher.h"
 #include "counter.h"
 #include "condition.h"
 
-uint8_t GetCanOffset()
-{
-
-}
-
-uint8_t GetHearbeat()
-{
-
-}
-
 bool GetInputVal(uint8_t nInput)
 {
-    if (nInput >= NUM_INPUTS)
+    if (nInput >= NUM_DIG_INPUTS)
         return false;
 
-    return in[nInput].fVal;
-}
-
-float GetOutputCurrent(uint8_t nOutput)
-{
-    if (nOutput >= NUM_OUTPUTS)
-        return 0;
-
-    return pf[nOutput].GetCurrent();
+    return digIn[nInput].fVal;
 }
 
 bool GetOutputState(uint8_t nOutput)
 {
-    if (nOutput >= NUM_OUTPUTS)
+    if (nOutput >= NUM_DIG_OUTPUTS)
         return false;
 
-    return pf[nOutput].GetState();
+    return static_cast<bool>(digOut[nOutput].fVal);
+}
+
+uint16_t GetAnalogInputVal(uint8_t nInput)
+{
+    if (nInput >= NUM_ANALOG_INPUTS)
+        return 0;
+
+    return static_cast<uint16_t>(analogIn[nInput].fVal);
+}
+
+float GetAnalogInputMv(uint8_t nInput)
+{
+    if (nInput >= NUM_ANALOG_INPUTS)
+        return 0;
+
+    return analogIn[nInput].fValMillivolts;
+}
+
+uint8_t GetRotarySwitchPos(uint8_t nInput)
+{
+    if (nInput >= NUM_ANALOG_INPUTS)
+        return 0;
+
+    return static_cast<uint8_t>(analogIn[nInput].fRotaryPos);
+}
+
+bool GetAnalogSwitchVal(uint8_t nInput)
+{
+    if (nInput >= NUM_ANALOG_INPUTS)
+        return false;
+
+    return static_cast<bool>(analogIn[nInput].fSwitchVal);
 }
 
 bool GetAnyCanInEnable()

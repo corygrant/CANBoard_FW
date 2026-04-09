@@ -69,7 +69,7 @@ enum class MsgSrc : uint8_t
     State_Error,
     Overcurrent,
     Voltage,
-    CAN,
+    CANbus,
     USB,
     Overtemp,
     Config,

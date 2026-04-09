@@ -3,6 +3,7 @@
 #include "port.h"
 #include "enums.h"
 #include "config.h"
+#include "input.h"
 
 class Digital_Input
 {

@@ -3,10 +3,8 @@
 #include "crc.h"
 #include "param_protocol.h"
 
-MB85RC fram(I2CD1, MB85RC_I2CADDR_DEFAULT);
-
 bool ReadConfig(){
-
+    /*
     // Read config
     if(!fram.Read(0x0, (uint8_t*)&stConfig, sizeof(stConfig))) {
         return false;
@@ -30,11 +28,12 @@ bool ReadConfig(){
     if(storedCrc != calculatedCrc) {
         return false; // Data corrupt or changed
     }
-    
+    */
     return true;
 }
 
 bool WriteConfig(){
+    /*
     if(!fram.CheckId()) {
         return false;
     }
@@ -54,12 +53,13 @@ bool WriteConfig(){
     if(!fram.Write(sizeof(stConfig), (uint8_t*)&dataCrc, sizeof(dataCrc))) {
         return false;
     }
-    
+    */
     return true;
 }
 
 void InitConfig()
 {
+    /*
     if(!fram.CheckId())
         Error::SetFatalError(FatalErrorType::ErrFRAM, MsgSrc::Config);
 
@@ -82,5 +82,5 @@ void InitConfig()
             Error::SetFatalError(FatalErrorType::ErrConfig, MsgSrc::Config);
         }
     }
-
+*/
 }

@@ -140,16 +140,16 @@ CPPSRC = $(ALLCPPSRC) \
 				 core/param_protocol.cpp \
 				 core/param_registry.cpp \
 				 core/canboard.cpp \
-				 functions/analog.cpp \
-				 functions/analog_switch.cpp \
+				 core/status.cpp \
+				 functions/analog_input.cpp \
 				 functions/can_input.cpp \
 				 functions/can_outputs.cpp \
 				 functions/condition.cpp \
 				 functions/counter.cpp \
-				 functions/digital.cpp \
+				 functions/digital_input.cpp \
+				 functions/digital_output.cpp \
 				 functions/flasher.cpp \
 				 functions/input.cpp \
-         		 functions/rotary_switch.cpp \
 				 functions/virtual_input.cpp \
 				 utils/crc.cpp \
 				 utils/dbc.cpp \

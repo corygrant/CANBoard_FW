@@ -6,12 +6,16 @@
 #include "can_outputs.h"
 #include "counter.h"
 #include "condition.h"
-#include "digital.h"
+#include "digital_input.h"
+#include "digital_output.h"
+#include "analog_input.h"
 #include "flasher.h"
 #include "virtual_input.h"
 
 extern CanboardConfig stConfig;
-extern Digital in[NUM_INPUTS];
+extern Digital_Input digIn[NUM_DIG_INPUTS];
+extern Analog_Input analogIn[NUM_ANALOG_INPUTS];
+extern Digital_Output digOut[NUM_DIG_OUTPUTS];
 extern CanInput canIn[NUM_CAN_INPUTS];
 extern CanOutputs canOutputs;
 extern VirtualInput virtIn[NUM_VIRT_INPUTS];
@@ -21,7 +25,9 @@ extern Condition condition[NUM_CONDITIONS];
 
 void ApplyAllConfig()
 {
-    ApplyConfig(Digital::nBaseIndex);
+    ApplyConfig(Digital_Input::nBaseIndex);
+    ApplyConfig(Digital_Output::nBaseIndex);
+    ApplyConfig(Analog_Input::nBaseIndex);
     ApplyConfig(CanInput::nBaseIndex);
     ApplyConfig(CanOutputs::nBaseIndex);
     ApplyConfig(VirtualInput::nBaseIndex);
@@ -42,10 +48,22 @@ void ApplyConfig(uint16_t nIndex)
         SetCanFilterEnabled(stConfig.stDevConfig.bCanFilterEnabled);
     }
 
-    if (nBaseIndex == Digital::nBaseIndex)
+    if (nBaseIndex == Digital_Input::nBaseIndex)
     {
-        for (uint8_t i = 0; i < NUM_INPUTS; i++)
-            in[i].SetConfig(&stConfig.stInput[i]);
+        for (uint8_t i = 0; i < NUM_DIG_INPUTS; i++)
+            digIn[i].SetConfig(&stConfig.stDigInput[i]);
+    }
+
+    if (nBaseIndex == Digital_Output::nBaseIndex)
+    {
+        for (uint8_t i = 0; i < NUM_DIG_OUTPUTS; i++)
+            digOut[i].SetConfig(&stConfig.stDigOutput[i]);
+    }
+
+    if (nBaseIndex == Analog_Input::nBaseIndex)
+    {
+        for (uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
+            analogIn[i].SetConfig(&stConfig.stAnalogInput[i]);
     }
 
     if (nBaseIndex == CanInput::nBaseIndex)
@@ -84,27 +102,21 @@ void ApplyConfig(uint16_t nIndex)
             virtIn[i].SetConfig(&stConfig.stVirtualInput[i]);
     }
 
-    if (nBaseIndex == Profet::nBaseIndex)
-    {
-        for (uint8_t i = 0; i < NUM_OUTPUTS; i++)
-            pf[i].SetConfig(&stConfig.stOutput[i]);
-    }
-
     if (nBaseIndex == Flasher::nBaseIndex)
     {
-        for (uint8_t i = 0; i < PDM_NUM_FLASHERS; i++)
+        for (uint8_t i = 0; i < NUM_FLASHERS; i++)
             flasher[i].SetConfig(&stConfig.stFlasher[i]);
     }
 
     if (nBaseIndex == Counter::nBaseIndex)
     {
-        for (uint8_t i = 0; i < PDM_NUM_COUNTERS; i++)
+        for (uint8_t i = 0; i < NUM_COUNTERS; i++)
             counter[i].SetConfig(&stConfig.stCounter[i]);
     }
 
     if (nBaseIndex == Condition::nBaseIndex)
     {
-        for (uint8_t i = 0; i < PDM_NUM_CONDITIONS; i++)
+        for (uint8_t i = 0; i < NUM_CONDITIONS; i++)
             condition[i].SetConfig(&stConfig.stCondition[i]);
     }
 }

@@ -3,8 +3,6 @@
 #include "enums.h"
 #include "msg.h"
 
-// Info message management functions extracted from pdm.cpp
-
 void CheckInfoMsgs();
 void InitInfoMsgs();
 

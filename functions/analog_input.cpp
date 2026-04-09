@@ -10,4 +10,41 @@ void Analog_Input::Update()
 
     fVal = (float)GetAdcRaw(channel);
     fValMillivolts = GetAdcVolts(channel);
+
+    RotaryUpdate();
+    SwitchUpdate();
+}
+
+void Analog_Input::RotaryUpdate()
+{
+    if(!pConfig->stRotary.bEnabled)
+    {
+        fRotaryPos = 0;
+        return;
+    }
+
+    if (fVal < pConfig->stRotary.fOffset)
+    {
+        fRotaryPos = pConfig->stRotary.bInvert ? pConfig->stRotary.fMaxPos : 0;
+    }
+    else
+    {
+        float stepsAboveOffset = (fVal - pConfig->stRotary.fOffset) / pConfig->stRotary.fStep;
+        int pos = static_cast<int>(stepsAboveOffset);
+        if (pos > pConfig->stRotary.fMaxPos)
+            pos = pConfig->stRotary.fMaxPos;
+
+        fRotaryPos = pConfig->stRotary.bInvert ? (pConfig->stRotary.fMaxPos - pos) : pos;
+    }
+}
+
+void Analog_Input::SwitchUpdate()
+{
+    if(!pConfig->stSwitch.bEnabled)
+    {
+        fSwitchVal = 0;
+        return;
+    }
+
+    fSwitchVal = input.Check(pConfig->stSwitch.eMode, pConfig->stSwitch.bInvert, fVal > static_cast<float>(pConfig->stSwitch.nThreshold));
 }

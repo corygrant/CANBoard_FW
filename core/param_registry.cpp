@@ -10,12 +10,6 @@ const ParamInfo stParams[] = {
     // Device Config (0x0000)
     DEVICE_CONFIG_PARAMS(),
 
-    // CAN Outputs (0x2000+)
-    ALL_CAN_OUTPUT_PARAMS,
-
-    // Outputs (0x1000+)
-    ALL_OUTPUT_PARAMS,
-
     // Digital Inputs (0x1200+)
     ALL_DIGITAL_INPUT_PARAMS,
 
@@ -34,23 +28,14 @@ const ParamInfo stParams[] = {
     // Flashers (0x1700+)
     ALL_FLASHER_PARAMS,
 
-    // Starter (0x1800)
-    STARTER_PARAMS(),
-    ALL_STARTER_DISABLE_PARAMS,
+    // CAN Outputs (0x2000+)
+    ALL_CAN_OUTPUT_PARAMS,
 
-    // Wiper (0x1900)
-    WIPER_PARAMS(),
-    WIPER_SPEED_MAP_PARAMS(),
-    WIPER_INTERMIT_PARAMS(),
+    // Digital Outputs (0x2100+)
+    ALL_DIGITAL_OUTPUT_PARAMS,
 
-    // Keypads (0x3000+)
-    ALL_KEYPAD_PARAMS,
-
-    // Keypad Buttons (0x2100+)
-    ALL_KEYPAD_BUTTON_PARAMS,
-
-    // Keypad Dials (0x2200+)
-    ALL_KEYPAD_DIAL_PARAMS,
+    // Analog Inputs (0x2200+)
+    ALL_ANALOG_INPUT_PARAMS
 };
 
 const uint16_t NUM_PARAMS = sizeof(stParams) / sizeof(stParams[0]);

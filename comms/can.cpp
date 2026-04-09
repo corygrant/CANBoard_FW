@@ -78,8 +78,6 @@ void CanRxThread(void *)
 {
     CANRxFrame msg;
 
-    CANTxFrame usbTx;
-
     chRegSetThreadName("CAN Rx");
 
     while (true)

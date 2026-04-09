@@ -26,20 +26,23 @@ struct Config_DigInput{
 
 struct Config_AnalogSwitch{
   bool bEnabled;
+  InputMode eMode;
+  bool bInvert;
   uint16_t nThreshold;
 };
 
 struct Config_RotarySwitch{
   bool bEnabled;
   bool bInvert;
-  uint8_t nPosCount;
-  uint16_t nPosStep;
+  float fOffset;
+  float fStep;
+  float fMaxPos;
 };
 
 struct Config_AnalogInput{
   bool bEnabled;
-  Config_AnalogSwitch stAnalogSwitch;
-  Config_RotarySwitch stRotarySwitch;
+  Config_AnalogSwitch stSwitch;
+  Config_RotarySwitch stRotary;
 };
 
 struct Config_DigOutput{
@@ -123,8 +126,8 @@ struct Config_Condition{
 
 struct CanboardConfig{
   Config_DeviceConfig stDevConfig;
-  Config_DigInput stInput[NUM_DIG_INPUTS];
-  Config_DigOutput stOutput[NUM_DIG_OUTPUTS];
+  Config_DigInput stDigInput[NUM_DIG_INPUTS];
+  Config_DigOutput stDigOutput[NUM_DIG_OUTPUTS];
   Config_AnalogInput stAnalogInput[NUM_ANALOG_INPUTS];
   Config_VirtualInput stVirtualInput[NUM_VIRT_INPUTS];
   Config_Flasher stFlasher[NUM_FLASHERS];
