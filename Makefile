@@ -118,7 +118,7 @@ include $(CHIBIOS)/os/various/cpp_wrappers/chcpp.mk
 include $(BOARDDIR)/board.mk
 
 # Define linker script file here
-LDSCRIPT= $(STARTUPLD)/STM32F303x8.ld
+LDSCRIPT= $(BOARDDIR)/STM32F303x8.ld
 
 # C sources that can be compiled in ARM or THUMB mode depending on the global
 # setting.

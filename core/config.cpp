@@ -1,86 +1,77 @@
 #include "config.h"
 #include "error.h"
 #include "crc.h"
-#include "param_protocol.h"
+#include "param_registry.h"
+#include "hal.h"
 
-bool ReadConfig(){
-    /*
-    // Read config
-    if(!fram.Read(0x0, (uint8_t*)&stConfig, sizeof(stConfig))) {
+// Last 2KB sector of flash (sector 31, 0x0800F800)
+#define CONFIG_SECTOR       31U
+#define CONFIG_FLASH_OFFSET (CONFIG_SECTOR * 2048U)
+#define CONFIG_FLASH        getBaseFlash(&EFLD1)
+
+static void SetAllDefaultParams()
+{
+    for (uint16_t i = 0; i < NUM_PARAMS; i++)
+        WriteParam(&stParams[i], stParams[i].nDefaultVal, false);
+}
+
+bool ReadConfig()
+{
+    CanboardConfig tempConfig;
+
+    flash_error_t err = flashRead(CONFIG_FLASH, CONFIG_FLASH_OFFSET,
+                                  sizeof(CanboardConfig), (uint8_t*)&tempConfig);
+    if (err != FLASH_NO_ERROR)
         return false;
-    }
-    
-    // Check version number
-    if(stConfig.stDevConfig.nConfigVersion != CONFIG_VERSION) {
+
+    if (tempConfig.stDevConfig.nConfigVersion != CONFIG_VERSION)
         return false;
-    }
-    
-    // Read stored data CRC
-    uint32_t storedCrc = 0;
-    if(!fram.Read(sizeof(stConfig), (uint8_t*)&storedCrc, sizeof(storedCrc))) {
+
+    uint32_t storedCrc;
+    err = flashRead(CONFIG_FLASH, CONFIG_FLASH_OFFSET + sizeof(CanboardConfig),
+                    sizeof(uint32_t), (uint8_t*)&storedCrc);
+    if (err != FLASH_NO_ERROR)
         return false;
-    }
-    
-    // Calculate CRC of the data we just read
-    uint32_t calculatedCrc = CalculateCRC32(&stConfig, sizeof(stConfig), 0xFFFFFFFF);
-    
-    // Compare CRCs to verify data integrity
-    if(storedCrc != calculatedCrc) {
-        return false; // Data corrupt or changed
-    }
-    */
+
+    if (CalculateCRC32(&tempConfig, sizeof(CanboardConfig)) != storedCrc)
+        return false;
+
+    stConfig = tempConfig;
     return true;
 }
 
-bool WriteConfig(){
-    /*
-    if(!fram.CheckId()) {
-        return false;
-    }
-    
-    // Make sure the version is current
+bool WriteConfig()
+{
     stConfig.stDevConfig.nConfigVersion = CONFIG_VERSION;
-    
-    // Write config
-    if(!fram.Write(0x0, (uint8_t*)&stConfig, sizeof(stConfig))) {
+
+    flash_error_t err = flashStartEraseSector(CONFIG_FLASH, CONFIG_SECTOR);
+    if (err != FLASH_NO_ERROR)
         return false;
-    }
-    
-    // Calculate config CRC
-    uint32_t dataCrc = CalculateCRC32(&stConfig, sizeof(stConfig), 0xFFFFFFFF);
-    
-    // Write CRC after config
-    if(!fram.Write(sizeof(stConfig), (uint8_t*)&dataCrc, sizeof(dataCrc))) {
+
+    err = flashWaitErase(CONFIG_FLASH);
+    if (err != FLASH_NO_ERROR)
         return false;
-    }
-    */
-    return true;
+
+    err = flashProgram(CONFIG_FLASH, CONFIG_FLASH_OFFSET,
+                       sizeof(CanboardConfig), (const uint8_t*)&stConfig);
+    if (err != FLASH_NO_ERROR)
+        return false;
+
+    uint32_t crc = CalculateCRC32(&stConfig, sizeof(CanboardConfig));
+    err = flashProgram(CONFIG_FLASH, CONFIG_FLASH_OFFSET + sizeof(CanboardConfig),
+                       sizeof(uint32_t), (const uint8_t*)&crc);
+
+    return (err == FLASH_NO_ERROR);
 }
 
 void InitConfig()
 {
-    /*
-    if(!fram.CheckId())
-        Error::SetFatalError(FatalErrorType::ErrFRAM, MsgSrc::Config);
+    eflStart(&EFLD1, NULL);
 
-    if(!ReadConfig())
+    if (!ReadConfig())
     {
-        if(fram.GetErrors() != 0)
-            Error::SetFatalError(FatalErrorType::ErrFRAM, MsgSrc::Config);
-        
-        //Write default for next power cycle
         SetAllDefaultParams();
-        if(!WriteConfig()){
-            //Couldn't write default config
-            //FRAM issue 
-            Error::SetFatalError(FatalErrorType::ErrFRAM, MsgSrc::Config);
-        }
-        else
-        {
-            //Wrote default config
-            //Error to force power cycle
+        if (!WriteConfig())
             Error::SetFatalError(FatalErrorType::ErrConfig, MsgSrc::Config);
-        }
     }
-*/
 }

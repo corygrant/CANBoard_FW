@@ -2,6 +2,16 @@
 #include "config.h"
 #include "status.h"
 
+void InitInfoMsgs()
+{
+
+}
+
+void CheckInfoMsgs()
+{
+
+}
+
 void SendInfoMsg(MsgType type, MsgSrc src, uint16_t nId, uint16_t nData0, uint16_t nData1, uint16_t nData2)
 {
     CANTxFrame tx;

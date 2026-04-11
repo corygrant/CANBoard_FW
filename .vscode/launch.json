@@ -3,7 +3,7 @@
     "configurations": [
         {
             "cwd": "${workspaceFolder}",
-            "executable": "${workspaceFolder}/build/CANBoard.elf",
+            "executable": "${workspaceFolder}/build/canboard_v2.elf",
             "name": "Debug CANBoard",
             "request": "launch",
             "type": "cortex-debug",
@@ -11,7 +11,7 @@
             "configFiles": ["interface/stlink.cfg", 
 						"target/stm32f3x.cfg"],
             "showDevDebugOutput": "raw",
-            "svdFile": "${workspaceFolder}STM32F303.svd",
+            "svdFile": "${workspaceFolder}/STM32F303.svd",
             "rtos": "auto",
             "v1": false,
             "runToEntryPoint": "main",

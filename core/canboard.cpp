@@ -154,7 +154,12 @@ void InitVarMap()
 
     // Analog inputs
     for (uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
+    {
         pVarMap[index++] = &analogIn[i].fVal;
+        pVarMap[index++] = &analogIn[i].fValMillivolts;
+        pVarMap[index++] = &analogIn[i].fRotaryPos;
+        pVarMap[index++] = &analogIn[i].fSwitchVal;
+    }
 
     // CAN Inputs
     for (uint8_t i = 0; i < NUM_CAN_INPUTS; i++)
