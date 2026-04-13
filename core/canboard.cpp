@@ -23,7 +23,6 @@
 #include "infomsg.h"
 #include "error.h"
 
-Analog_Input analogIn[NUM_ANALOG_INPUTS];
 CanInput canIn[NUM_CAN_INPUTS];
 CanOutputs canOutputs;
 VirtualInput virtIn[NUM_VIRT_INPUTS];
@@ -71,6 +70,11 @@ void InitCanboard()
         Error::SetFatalError(FatalErrorType::ErrCAN, MsgSrc::Init);
 
     InitInfoMsgs();
+
+    for(uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
+    {
+        stConfig.stAnalogInput[i].bEnabled = true;
+    }
 
     canboardThread.start(NORMALPRIO);
 }

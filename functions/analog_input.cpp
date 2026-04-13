@@ -8,8 +8,8 @@ void Analog_Input::Update()
         return;
     }
 
-    fVal = (float)GetAdcRaw(channel);
-    fValMillivolts = GetAdcVolts(channel);
+    fVal = (float)GetAdcRaw(m_channel);
+    fValMillivolts = GetAdcVolts(m_channel) * 1000.0;
 
     RotaryUpdate();
     SwitchUpdate();

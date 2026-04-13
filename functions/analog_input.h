@@ -7,8 +7,9 @@
 class Analog_Input
 {
 public:
-    Analog_Input() {
-    };
+    Analog_Input(const AnalogChannel channel) 
+                : m_channel(channel) 
+    {};
 
     static const uint16_t nBaseIndex = 0x2200;
 
@@ -25,9 +26,9 @@ public:
     float fSwitchVal;
 
 private:
-    Config_AnalogInput* pConfig;
+    const AnalogChannel m_channel;
 
-    AnalogChannel channel;
+    Config_AnalogInput* pConfig;    
 
     Input input;
 

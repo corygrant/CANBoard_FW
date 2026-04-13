@@ -1,15 +1,5 @@
 #include "hw_devices.h"
 
-/*
-DigIn1 = 0,
-DigIn2 = 1,
-DigIn3 = 2,
-DigIn4 = 3,
-DigIn5 = 4,
-DigIn6 = 5,
-DigIn7 = 6,
-DigIn8 = 7
-*/
 Digital_Input digIn[NUM_DIG_INPUTS] = {
     Digital_Input(LINE_DI1),
     Digital_Input(LINE_DI2),
@@ -20,19 +10,19 @@ Digital_Input digIn[NUM_DIG_INPUTS] = {
     Digital_Input(LINE_DI7),
     Digital_Input(LINE_DI8)};   
     
-    
 Digital_Input idSel[2] = {
     Digital_Input(LINE_CAN_ID_1),
     Digital_Input(LINE_CAN_ID_2)};
 
-/*
-DigOut1 = 0,
-DigOut2 = 1,
-DigOut3 = 2,
-DigOut4 = 3
-*/
 Digital_Output digOut[NUM_DIG_OUTPUTS] = {
     Digital_Output(LINE_DO1),
     Digital_Output(LINE_DO2),
     Digital_Output(LINE_DO3),
     Digital_Output(LINE_DO4)};
+
+Analog_Input analogIn[NUM_ANALOG_INPUTS] = {
+    Analog_Input(AnalogChannel::AnIn1),
+    Analog_Input(AnalogChannel::AnIn2),
+    Analog_Input(AnalogChannel::AnIn3),
+    Analog_Input(AnalogChannel::AnIn4),
+    Analog_Input(AnalogChannel::AnIn5)};
