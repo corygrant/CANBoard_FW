@@ -63,21 +63,9 @@ enum class MsgType : uint8_t
 
 enum class MsgSrc : uint8_t
 {
-    State_Run = 1,
-    State_Sleep,
-    State_Overtemp,
-    State_Error,
-    Overcurrent,
-    Voltage,
-    CANbus,
-    USB,
-    Overtemp,
+    CANbus = 1,
     Config,
-    FRAM,
     Analog,
-    I2C,
-    TempSensor,
-    USBConnection,
     Init
 };
 

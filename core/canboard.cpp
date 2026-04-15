@@ -71,11 +71,6 @@ void InitCanboard()
 
     InitInfoMsgs();
 
-    for(uint8_t i = 0; i < NUM_ANALOG_INPUTS; i++)
-    {
-        stConfig.stAnalogInput[i].bEnabled = true;
-    }
-
     canboardThread.start(NORMALPRIO);
 }
 
