@@ -13,11 +13,6 @@ CANBoard is a simple CAN enabled IO board, specifically designed to be used in d
 # Hardware
 [CANBoard hardware](https://github.com/corygrant/CANBoard_HW)
 
-# Firmware Versions
-CANBoard firmware uses ChibiOS as of v2.0.0
-
-The original ST HAL FreeRTOS version of the firmware can be found on the branch: original-fw/st-hal-freertos
-
 # Goals
 - Create a low cost device that my friends and I can use in our project cars
 - Use components that are easily soldered by hand (hence 0805) and are preferably from my stock of frequently used parts (ex: LD1117S33CTR)
