@@ -10,9 +10,9 @@
 // Device Config Parameters - Base 0x0000
 //=============================================================================
 #define DEVICE_CONFIG_PARAMS() \
-    {0x0000, 0, &stConfig.stDevConfig.nBaseId,            &stConfigTemp.stDevConfig.nBaseId,           ParamType::UInt16, 0x7D0, 0, 0x7FF}, \
-    {0x0000, 1, &stConfig.stDevConfig.nParamRxId,         &stConfigTemp.stDevConfig.nParamRxId,        ParamType::UInt16, 0x080, 0, 0x7FF}, \
-    {0x0000, 2, &stConfig.stDevConfig.nParamTxId,         &stConfigTemp.stDevConfig.nParamTxId,        ParamType::UInt16, 0x081, 0, 0x7FF}, \
+    {0x0000, 0, &stConfig.stDevConfig.nBaseId,            &stConfigTemp.stDevConfig.nBaseId,           ParamType::UInt16, 0x640, 0, 0x7FF}, \
+    {0x0000, 1, &stConfig.stDevConfig.nParamRxId,         &stConfigTemp.stDevConfig.nParamRxId,        ParamType::UInt16, 0x100, 0, 0x7FF}, \
+    {0x0000, 2, &stConfig.stDevConfig.nParamTxId,         &stConfigTemp.stDevConfig.nParamTxId,        ParamType::UInt16, 0x101, 0, 0x7FF}, \
     {0x0000, 3, &stConfig.stDevConfig.eCanSpeed,          &stConfigTemp.stDevConfig.eCanSpeed,         ParamType::Enum,   static_cast<uint32_t>(CanBitrate::Bitrate_500K), 0, 4}, \
     {0x0000, 4, &stConfig.stDevConfig.bCanFilterEnabled,  &stConfigTemp.stDevConfig.bCanFilterEnabled, ParamType::Bool,   0, 0, 1}
 

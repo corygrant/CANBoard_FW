@@ -23,13 +23,13 @@ void Analog_Input::RotaryUpdate()
         return;
     }
 
-    if (fVal < pConfig->stRotary.fOffset)
+    if (fValMillivolts < pConfig->stRotary.fOffset)
     {
         fRotaryPos = pConfig->stRotary.bInvert ? pConfig->stRotary.fMaxPos : 0;
     }
     else
     {
-        float stepsAboveOffset = (fVal - pConfig->stRotary.fOffset) / pConfig->stRotary.fStep;
+        float stepsAboveOffset = (fValMillivolts - pConfig->stRotary.fOffset) / pConfig->stRotary.fStep;
         int pos = static_cast<int>(stepsAboveOffset);
         if (pos > pConfig->stRotary.fMaxPos)
             pos = pConfig->stRotary.fMaxPos;
@@ -46,5 +46,5 @@ void Analog_Input::SwitchUpdate()
         return;
     }
 
-    fSwitchVal = input.Check(pConfig->stSwitch.eMode, pConfig->stSwitch.bInvert, fVal > static_cast<float>(pConfig->stSwitch.nThreshold));
+    fSwitchVal = input.Check(pConfig->stSwitch.eMode, pConfig->stSwitch.bInvert, fValMillivolts > static_cast<float>(pConfig->stSwitch.nThreshold));
 }
