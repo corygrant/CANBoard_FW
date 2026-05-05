@@ -32,7 +32,7 @@ void EncodeParamRsp(CANTxFrame *tx, uint8_t cmd, uint16_t index, uint8_t subinde
     tx->RTR = 0;
     tx->DLC = 8;
 
-    tx->SID =  stConfig.stDevConfig.nParamTxId;
+    tx->SID =  stConfig.stDevConfig.nBaseId + CONFIG_TX_OFFSET;
 
     tx->data8[0] = cmd;
     tx->data8[1] = index & 0xFF;
@@ -114,7 +114,7 @@ MsgCmd ProcessParamMsg(CANRxFrame *rx, uint16_t *nIndex) {
     CANTxFrame tx;
     ParamMsg msg;
 
-    if (rx->SID != stConfig.stDevConfig.nParamRxId)
+    if (rx->SID != stConfig.stDevConfig.nBaseId + CONFIG_RX_OFFSET)
         return MsgCmd::Invalid;
 
     if (rx->DLC != 8)

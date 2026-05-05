@@ -10,8 +10,6 @@
 struct Config_DeviceConfig{
   uint16_t nConfigVersion;
   uint16_t nBaseId;
-  uint16_t nParamRxId; //Config->Pdm
-  uint16_t nParamTxId; //Pdm->Config
   CanBitrate eCanSpeed;
   bool bCanFilterEnabled;
 };

@@ -12,7 +12,7 @@ CANTxMsg TxMsg0()
     // Build Msg 0 (Analog inputs 1-4 millivolts)
     //=======================================================
     stMsg.frame.IDE = CAN_IDE_STD;
-    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + GetCanOffset() + 0;
+    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + CYCLIC_TX_OFFSET + 0;
     stMsg.frame.DLC = 8;
     stMsg.frame.data16[0] = (uint16_t)(GetAnalogInputMv(0));
     stMsg.frame.data16[1] = (uint16_t)(GetAnalogInputMv(1));
@@ -31,7 +31,7 @@ CANTxMsg TxMsg1()
     // Build Msg 1 (Analog input 5 millivolts and temperature)
     //=======================================================
     stMsg.frame.IDE = CAN_IDE_STD;
-    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + GetCanOffset() + 1;
+    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + CYCLIC_TX_OFFSET + 1;
     stMsg.frame.DLC = 8;
     stMsg.frame.data16[0] = (uint16_t)(GetAnalogInputMv(4));
     stMsg.frame.data16[1] = 0;
@@ -50,7 +50,7 @@ CANTxMsg TxMsg2()
     // Build Msg 2 (Rotary switches, dig inputs, analog input switches, low side output status, heartbeat)
     //=======================================================
     stMsg.frame.IDE = CAN_IDE_STD;
-    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + GetCanOffset() + 2;
+    stMsg.frame.SID = stConfig.stDevConfig.nBaseId + CYCLIC_TX_OFFSET + 2;
     stMsg.frame.DLC = 8;
     stMsg.frame.data8[0] = (GetRotarySwitchPos(1) << 4) + GetRotarySwitchPos(0);
     stMsg.frame.data8[1] = (GetRotarySwitchPos(3) << 4) + GetRotarySwitchPos(2);

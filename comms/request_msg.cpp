@@ -7,7 +7,7 @@
 void CheckRequestMsgs(CANRxFrame *frame)
 {
     //Check for settings request message
-    if(frame->SID != stConfig.stDevConfig.nParamRxId)
+    if(frame->SID != stConfig.stDevConfig.nBaseId + CONFIG_RX_OFFSET)
         return;
 
     // Check for burn request
@@ -18,7 +18,7 @@ void CheckRequestMsgs(CANRxFrame *frame)
         (frame->data8[3] == 8))
     {
         CANTxFrame txMsg;
-        txMsg.SID = stConfig.stDevConfig.nParamTxId;
+        txMsg.SID = stConfig.stDevConfig.nBaseId + CONFIG_TX_OFFSET;
         txMsg.IDE = CAN_IDE_STD;
         txMsg.DLC = 8;
         txMsg.data8[0] = static_cast<uint8_t>(MsgCmd::BurnSettings);
@@ -37,7 +37,7 @@ void CheckRequestMsgs(CANRxFrame *frame)
         (frame->data8[0] == static_cast<uint8_t>(MsgCmd::Version)))
     {
         CANTxFrame txMsg;
-        txMsg.SID = stConfig.stDevConfig.nParamTxId;
+        txMsg.SID = stConfig.stDevConfig.nBaseId + CONFIG_TX_OFFSET;
         txMsg.IDE = CAN_IDE_STD;
         txMsg.DLC = 8;
         txMsg.data8[0] = static_cast<uint8_t>(MsgCmd::Version);

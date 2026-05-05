@@ -9,10 +9,6 @@ Digital_Input digIn[NUM_DIG_INPUTS] = {
     Digital_Input(LINE_DI6),
     Digital_Input(LINE_DI7),
     Digital_Input(LINE_DI8)};   
-    
-Digital_Input idSel[2] = {
-    Digital_Input(LINE_CAN_ID_1),
-    Digital_Input(LINE_CAN_ID_2)};
 
 Digital_Output digOut[NUM_DIG_OUTPUTS] = {
     Digital_Output(LINE_DO1),

@@ -34,8 +34,6 @@ CanboardConfig stConfig;
 CanboardConfig stConfigTemp; // Used for staging new config before applying
 float *pVarMap[VAR_MAP_SIZE];
 
-uint16_t nBaseIdOffset = 0;
-
 void InitVarMap();
 void CyclicUpdate();
 void States();
@@ -128,11 +126,6 @@ void CyclicUpdate()
         condition[i].Update();
 
     CheckInfoMsgs();
-
-    //Set CAN base ID
-    uint8_t idSel0 = static_cast<uint8_t>(idSel[0].fVal);
-    uint8_t idSel1 = static_cast<uint8_t>(idSel[1].fVal);
-    nBaseIdOffset = ((idSel0 & 0x01) << 4) + ((idSel1 & 0x01) << 5);
 }
 
 void InitVarMap()
@@ -195,9 +188,4 @@ void InitVarMap()
     if (index != VAR_MAP_SIZE)
         Error::SetFatalError(FatalErrorType::ErrVarMap, MsgSrc::Init);
 
-}
-
-uint8_t GetCanOffset()
-{
-    return nBaseIdOffset;
 }

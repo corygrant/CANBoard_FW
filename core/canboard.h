@@ -30,4 +30,3 @@ extern CanboardConfig stConfigTemp; // Used for staging new config before applyi
 extern float *pVarMap[VAR_MAP_SIZE];
 
 void InitCanboard();
-uint8_t GetCanOffset();
