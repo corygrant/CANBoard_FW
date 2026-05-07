@@ -11,7 +11,7 @@
             "configFiles": ["interface/stlink.cfg", 
 						"target/stm32f3x.cfg"],
             "showDevDebugOutput": "raw",
-            "svdFile": "${workspaceFolder}/STM32F303.svd",
+            "svdFile": "${workspaceFolder}/boards/canboard_v2/STM32F303.svd",
             "rtos": "auto",
             "v1": false,
             "runToEntryPoint": "main",
