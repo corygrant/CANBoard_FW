@@ -1,3 +1,6 @@
+> [!WARNING]
+> Firmware was replaced by [dingoFW](https://github.com/corygrant/dingoFW)
+
 # CANBoard_FW
 CANBoard is a simple CAN enabled IO board, specifically designed to be used in devices like steering wheels/button boxes/panels/etc.
 
